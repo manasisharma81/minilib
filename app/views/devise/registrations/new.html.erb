@@ -1,0 +1,52 @@
+<h1>Sign up</h1>
+
+<% if resource.errors.any? %>
+  <ul>
+    <% resource.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<form action="/users" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+  <div>
+    <label for="username_box">Username</label>
+    <input type="text" id="username_box" name="user[username]" value="<%= resource.username %>">
+  </div>
+
+  <div>
+    <label for="email_box">Email</label>
+    <input type="email" id="email_box" name="user[email]" value="<%= resource.email %>">
+  </div>
+
+  <div>
+    <label for="password_box">Password</label>
+    <% if @minimum_password_length %>
+      <span>(<%= @minimum_password_length %> characters minimum)</span>
+    <% end %>
+    <input type="password" id="password_box" name="user[password]">
+  </div>
+
+  <div>
+    <label for="password_confirmation_box">Password confirmation</label>
+    <input type="password" id="password_confirmation_box" name="user[password_confirmation]">
+  </div>
+
+  <div>
+    <label for="bio_box">Bio</label>
+    <textarea id="bio_box" name="user[bio]"><%= resource.bio %></textarea>
+  </div>
+
+  <div>
+    <label for="profile_picture_box">Profile picture</label>
+    <input type="text" id="profile_picture_box" name="user[profile_picture]" value="<%= resource.profile_picture %>">
+  </div>
+
+  <button type="submit">Sign up</button>
+</form>
+
+<p>
+  <a href="/users/sign_in">Sign in</a>
+</p>

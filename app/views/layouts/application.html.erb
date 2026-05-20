@@ -22,7 +22,30 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+<body>
+  <nav>
+    <% if user_signed_in? %>
+      <span>Signed in as <%= current_user.username %></span>
+
+      <form action="/users/sign_out" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit">Sign out</button>
+      </form>
+    <% else %>
+      <a href="/users/sign_in">Sign in</a>
+      <a href="/users/sign_up">Sign up</a>
+    <% end %>
+  </nav>
+
+  <% if notice.present? %>
+    <p><%= notice %></p>
+  <% end %>
+
+  <% if alert.present? %>
+    <p><%= alert %></p>
+  <% end %>
+
     <%= yield %>
   </body>
 </html>
