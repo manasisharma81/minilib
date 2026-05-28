@@ -4,6 +4,9 @@
   <dt>Author</dt>
   <dd><%= @book.author %></dd>
 
+  <dt>Owner</dt>
+  <dd><a href="/users/<%= @book.user.id %>"><%= @book.user.username %></a></dd>
+
   <% if @book.cover_image_url.present? %>
     <dt>Cover image</dt>
     <dd>

@@ -1,0 +1,26 @@
+<h1><%= @user.username %></h1>
+
+<% if @user.profile_picture.present? %>
+  <p>
+    <img src="<%= @user.profile_picture %>" alt="<%= @user.username %> profile picture" style="width: 150px; height: 150px; object-fit: cover;">
+  </p>
+<% end %>
+
+<% if @user.bio.present? %>
+  <p><%= @user.bio %></p>
+<% end %>
+
+<h2>Books</h2>
+
+<% if @user.books.any? %>
+  <ul>
+    <% @user.books.each do |book| %>
+      <li>
+        <a href="/books/<%= book.id %>"><%= book.title %></a>
+        by <%= book.author %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No books yet.</p>
+<% end %>

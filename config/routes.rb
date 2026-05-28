@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get("/my_profile", { :controller => "users", :action => "show_current_user" })
   get("/edit_my_profile", { :controller => "users", :action => "edit_current_user_form" })
   post("/update_my_profile", { :controller => "users", :action => "update_current_user" })
+  get("/users/:path_id", { :controller => "users", :action => "show" })
 
 get("/books", { :controller => "books", :action => "index" })
 get("/books/:path_id", { :controller => "books", :action => "show" })

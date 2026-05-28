@@ -11,7 +11,7 @@ class BooksController < ApplicationController
     the_id = params.fetch("path_id")
     @book = Book.where({ :id => the_id }).at(0)
 
-    if @book == nil || @book.user_id != current_user.id
+    if @book == nil
       redirect_to("/books")
     else
       render({ :template => "book_templates/show" })

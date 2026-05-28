@@ -1,8 +1,20 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
+  skip_before_action :authenticate_user!, only: [ :show ]
 
   def show_current_user
     @user = current_user
+  end
+
+  def show
+    the_id = params.fetch("path_id")
+    @user = User.where({ :id => the_id }).at(0)
+
+    if @user == nil
+      redirect_to("/")
+    else
+      render({ :template => "users/show" })
+    end
   end
 
   def edit_current_user_form
