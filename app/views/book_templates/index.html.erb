@@ -1,32 +1,69 @@
-<h1>My books</h1>
+<article>
+  <header>
+    <h1>My books</h1>
+    <p><a href="/search_books">Search books</a></p>
+  </header>
 
-<p>
-  <a href="/search_books">Add a book</a>
-</p>
-
-<% if @user_books.any? %>
-  <ul>
-    <% @user_books.each do |user_book| %>
-      <% book = user_book.book %>
-      <li>
-        <% if book.cover_image_url.present? %>
-          <img src="<%= book.cover_image_url %>" alt="<%= book.title %> cover" style="width: 75px; height: 110px; object-fit: cover;">
+  <% if @user_books.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Cover</th>
+          <th>Book</th>
+          <th>My rating</th>
+          <th>My review</th>
+          <th>Review actions</th>
+          <th>Ownership actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user_books.each do |user_book| %>
+          <% book = user_book.book %>
+          <tr>
+            <td>
+              <% if book.cover_image_url.present? %>
+                <img src="<%= book.cover_image_url %>" alt="<%= book.title %> cover" style="width: 75px; height: 110px; object-fit: cover;">
+              <% end %>
+            </td>
+            <td>
+              <a href="/books/<%= book.id %>"><%= book.title %></a>
+              <% if book.authors.present? %>
+                <br>
+                <small><%= book.authors %></small>
+              <% end %>
+            </td>
+            <td>
+              <% if user_book.rating.present? %>
+                <% filled_stars = "★" * user_book.rating %>
+                <% empty_stars = "☆" * (5 - user_book.rating) %>
+                <%= filled_stars + empty_stars %>
+                <br>
+                <small><%= user_book.rating %>/5</small>
+              <% else %>
+                Not rated yet
+              <% end %>
+            </td>
+            <td>
+              <% if user_book.review.present? %>
+                <%= truncate(user_book.review, length: 120) %>
+              <% else %>
+                No review yet
+              <% end %>
+            </td>
+            <td>
+              <a href="/modify_book/<%= user_book.id %>" role="button">Edit review</a>
+            </td>
+            <td>
+              <a href="/delete_book/<%= user_book.id %>" role="button" class="secondary">Remove from my books</a>
+            </td>
+          </tr>
         <% end %>
-
-        <a href="/books/<%= book.id %>"><%= book.title %></a>
-
-        <% if book.authors.present? %>
-          by <%= book.authors %>
-        <% end %>
-
-        <a href="/modify_book/<%= user_book.id %>">Edit my ownership/review</a>
-        <a href="/delete_book/<%= user_book.id %>">Remove from my books</a>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No books yet.</p>
-<% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No books yet.</p>
+  <% end %>
+</article>
 
 <p>
   <a href="/my_profile">Back to profile</a>

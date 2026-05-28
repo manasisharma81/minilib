@@ -1,0 +1,84 @@
+<article>
+  <header>
+    <h1>Borrow conversation</h1>
+  </header>
+
+  <section>
+    <h2><a href="/books/<%= @borrow_request.book.id %>"><%= @borrow_request.book.title %></a></h2>
+    <p>
+      <strong>Requester:</strong>
+      <a href="/users/<%= @borrow_request.requester.id %>"><%= @borrow_request.requester.username %></a>
+    </p>
+    <p>
+      <strong>Owner:</strong>
+      <a href="/users/<%= @borrow_request.owner.id %>"><%= @borrow_request.owner.username %></a>
+    </p>
+    <p>
+      <strong>Status:</strong>
+      <%= @borrow_request.status %>
+    </p>
+    <% if @borrow_request.status == "closed" %>
+      <p><strong>Conversation closed</strong></p>
+    <% end %>
+  </section>
+
+  <section>
+    <h3>Original request note</h3>
+    <% if @borrow_request.message.present? %>
+      <p><%= @borrow_request.message %></p>
+    <% else %>
+      <p>No original note.</p>
+    <% end %>
+  </section>
+</article>
+
+<article>
+  <header>
+    <h2>Messages</h2>
+  </header>
+
+  <% if @borrow_messages.any? %>
+    <% @borrow_messages.each do |borrow_message| %>
+      <article>
+        <header>
+          <strong><a href="/users/<%= borrow_message.user.id %>"><%= borrow_message.user.username %></a></strong>
+          <span><%= borrow_message.created_at.strftime("%b %-d, %Y at %-I:%M %p") %></span>
+        </header>
+        <p><%= simple_format(borrow_message.body) %></p>
+      </article>
+    <% end %>
+  <% else %>
+    <p>No messages yet.</p>
+  <% end %>
+</article>
+
+<article>
+  <header>
+    <h2>Reply</h2>
+  </header>
+
+  <% if @borrow_request.status == "closed" %>
+    <p>Conversation closed</p>
+  <% else %>
+    <form action="/create_borrow_message/<%= @borrow_request.id %>" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+      <div>
+        <label for="query_body">Message</label>
+        <textarea id="query_body" name="query_body" rows="5"></textarea>
+      </div>
+
+      <button type="submit">Send message</button>
+    </form>
+  <% end %>
+
+  <% if @borrow_request.status != "closed" %>
+    <p>
+      <a href="/close_borrow_request/<%= @borrow_request.id %>">Close conversation</a>
+    </p>
+  <% end %>
+</article>
+
+<p>
+  <a href="/borrow_requests">Back to borrow requests</a>
+</p>

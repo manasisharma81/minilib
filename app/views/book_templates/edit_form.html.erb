@@ -1,30 +1,29 @@
-<h1>Edit my ownership/review</h1>
+<article>
+  <header>
+    <h1>Edit my ownership/review</h1>
+    <p><%= @user_book.book.title %></p>
+  </header>
 
-<h2><%= @user_book.book.title %></h2>
+  <% if @user_book.errors.any? %>
+    <ul>
+      <% @user_book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
 
-<% if @user_book.errors.any? %>
-  <ul>
-    <% @user_book.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-    <% end %>
-  </ul>
-<% end %>
+  <form action="/update_book/<%= @user_book.id %>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
-<form action="/update_book/<%= @user_book.id %>" method="post">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-
-  <div>
     <label for="rating_box">My rating</label>
     <input type="number" id="rating_box" name="query_rating" value="<%= @user_book.rating %>">
-  </div>
 
-  <div>
     <label for="review_box">My review</label>
     <textarea id="review_box" name="query_review"><%= @user_book.review %></textarea>
-  </div>
 
-  <button type="submit">Update my ownership/review</button>
-</form>
+    <button type="submit">Update my ownership/review</button>
+  </form>
+</article>
 
 <p>
   <a href="/books/<%= @user_book.book_id %>">Cancel</a>

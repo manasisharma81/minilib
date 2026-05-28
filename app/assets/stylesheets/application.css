@@ -22,3 +22,118 @@
     display: none !important;
   }
 }
+
+.pico {
+  --pico-primary: #7c3aed;
+  --pico-primary-hover: #5b21b6;
+  --pico-primary-focus: #f3e8ff;
+}
+
+.profile-card {
+  text-align: center;
+}
+
+.profile-avatar,
+.profile-avatar-placeholder {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+}
+
+.profile-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3e8ff;
+  color: #5b21b6;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.brand-mark {
+  color: #7c3aed;
+}
+
+.home-hero article {
+  background: #f3e8ff;
+  border-color: #e9d5ff;
+}
+
+.home-hero h1 {
+  color: #5b21b6;
+}
+
+.home-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.home-feature-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.book-detail-layout {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(150px, 220px) 1fr;
+  align-items: start;
+}
+
+.book-cover-panel {
+  text-align: center;
+}
+
+.book-cover-large,
+.book-cover-placeholder {
+  width: 150px;
+  height: 220px;
+}
+
+.book-cover-large {
+  object-fit: cover;
+}
+
+.book-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 1rem;
+  background: #f3e8ff;
+  color: #5b21b6;
+  text-align: center;
+}
+
+.book-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .book-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}

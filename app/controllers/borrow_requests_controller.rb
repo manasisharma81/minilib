@@ -8,6 +8,19 @@ class BorrowRequestsController < ApplicationController
     render({ :template => "borrow_request_templates/index" })
   end
 
+  def show
+    load_borrow_request_from_params
+
+    if @borrow_request == nil
+      redirect_to("/borrow_requests", { :alert => "Borrow request not found." })
+    elsif !current_user_is_participant?
+      redirect_to("/borrow_requests", { :alert => "You are not part of that conversation." })
+    else
+      @borrow_messages = @borrow_request.borrow_messages.order(:created_at)
+      render({ :template => "borrow_request_templates/show" })
+    end
+  end
+
   def create_row
     the_book_id = params.fetch("path_book_id")
     the_owner_id = params.fetch("path_owner_id")
@@ -64,5 +77,30 @@ class BorrowRequestsController < ApplicationController
     end
 
     redirect_to("/borrow_requests")
+  end
+
+  def close
+    load_borrow_request_from_params
+
+    if @borrow_request == nil
+      redirect_to("/borrow_requests", { :alert => "Borrow request not found." })
+    elsif !current_user_is_participant?
+      redirect_to("/borrow_requests", { :alert => "You are not part of that conversation." })
+    else
+      @borrow_request.status = "closed"
+      @borrow_request.save
+      redirect_to("/borrow_requests/" + @borrow_request.id.to_s, { :notice => "Conversation closed." })
+    end
+  end
+
+  private
+
+  def load_borrow_request_from_params
+    the_id = params.fetch("path_id")
+    @borrow_request = BorrowRequest.where({ :id => the_id }).at(0)
+  end
+
+  def current_user_is_participant?
+    @borrow_request != nil && (@borrow_request.requester_id == current_user.id || @borrow_request.owner_id == current_user.id)
   end
 end

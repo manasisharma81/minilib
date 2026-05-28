@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_28_002000) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_28_003000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_28_002000) do
     t.string "published_date"
     t.string "publisher"
     t.index ["google_books_id"], name: "index_books_on_google_books_id", unique: true
+  end
+
+  create_table "borrow_messages", force: :cascade do |t|
+    t.bigint "borrow_request_id", null: false
+    t.bigint "user_id", null: false
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["borrow_request_id"], name: "index_borrow_messages_on_borrow_request_id"
+    t.index ["user_id"], name: "index_borrow_messages_on_user_id"
   end
 
   create_table "borrow_requests", force: :cascade do |t|

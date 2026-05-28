@@ -22,11 +22,12 @@ class BorrowRequest < ApplicationRecord
   belongs_to :requester, class_name: "User"
   belongs_to :owner, class_name: "User"
   belongs_to :book
+  has_many :borrow_messages, dependent: :destroy
 
   validates :requester_id, presence: true
   validates :owner_id, presence: true
   validates :book_id, presence: true
-  validates :status, presence: true, inclusion: { in: [ "pending", "approved", "denied" ] }
+  validates :status, presence: true, inclusion: { in: [ "pending", "approved", "denied", "closed" ] }
 
   validate :requester_cannot_be_owner
   validate :owner_must_own_book

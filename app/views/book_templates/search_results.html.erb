@@ -1,42 +1,67 @@
-<h1>Search results</h1>
+<article>
+  <header>
+    <h1>Search results</h1>
+    <p>
+      <a href="/search_books">Search again</a>
+      <a href="/books">Back to my books</a>
+    </p>
+  </header>
 
-<p>
-  <a href="/search_books">Search again</a>
-</p>
+  <% if @error_message.present? %>
+    <p><%= @error_message %></p>
+  <% elsif @results.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Cover</th>
+          <th>Book</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @results.each do |result| %>
+          <% volume_info = result.fetch("volumeInfo", {}) %>
+          <% image_links = volume_info.fetch("imageLinks", {}) %>
+          <tr>
+            <td>
+              <% if image_links.fetch("thumbnail", "").present? %>
+                <img src="<%= image_links.fetch("thumbnail", "") %>" alt="<%= volume_info.fetch("title", "Untitled") %> cover" style="width: 75px; height: 110px; object-fit: cover;">
+              <% end %>
+            </td>
+            <td>
+              <strong><%= volume_info.fetch("title", "Untitled") %></strong>
 
-<% if @error_message.present? %>
-  <p><%= @error_message %></p>
-<% elsif @results.any? %>
-  <ul>
-    <% @results.each do |result| %>
-      <% volume_info = result.fetch("volumeInfo", {}) %>
-      <% image_links = volume_info.fetch("imageLinks", {}) %>
-      <li>
-        <% if image_links.fetch("thumbnail", "").present? %>
-          <img src="<%= image_links.fetch("thumbnail", "") %>" alt="<%= volume_info.fetch("title", "Untitled") %> cover" style="width: 75px; height: 110px; object-fit: cover;">
+              <% if volume_info.fetch("authors", []).any? %>
+                <br>
+                <small><%= volume_info.fetch("authors", []).join(", ") %></small>
+              <% end %>
+
+              <% if volume_info.fetch("publishedDate", "").present? %>
+                <br>
+                <small>Published <%= volume_info.fetch("publishedDate", "") %></small>
+              <% end %>
+
+              <% if volume_info.fetch("publisher", "").present? %>
+                <br>
+                <small><%= volume_info.fetch("publisher", "") %></small>
+              <% end %>
+            </td>
+            <td>
+              <form action="/preview_google_book/<%= result.fetch("id") %>" method="post">
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                <button type="submit">View details</button>
+              </form>
+
+              <form action="/add_google_book/<%= result.fetch("id") %>" method="post">
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                <button type="submit">Add to my books</button>
+              </form>
+            </td>
+          </tr>
         <% end %>
-
-        <h2><%= volume_info.fetch("title", "Untitled") %></h2>
-
-        <% if volume_info.fetch("authors", []).any? %>
-          <p><%= volume_info.fetch("authors", []).join(", ") %></p>
-        <% end %>
-
-        <% if volume_info.fetch("publishedDate", "").present? %>
-          <p>Published <%= volume_info.fetch("publishedDate", "") %></p>
-        <% end %>
-
-        <% if volume_info.fetch("publisher", "").present? %>
-          <p><%= volume_info.fetch("publisher", "") %></p>
-        <% end %>
-
-        <form action="/add_google_book/<%= result.fetch("id") %>" method="post">
-          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-          <button type="submit">Add to my books</button>
-        </form>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No results found.</p>
-<% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No results found.</p>
+  <% end %>
+</article>

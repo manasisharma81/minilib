@@ -1,50 +1,52 @@
-<h1>My profile</h1>
-
-<dl>
-  <dt>Username</dt>
-  <dd><%= @user.username %></dd>
-
-  <dt>Email</dt>
-  <dd><%= @user.email %></dd>
-
-  <% if @user.bio.present? %>
-    <dt>Bio</dt>
-    <dd><%= @user.bio %></dd>
-  <% end %>
-
-  <dt>Profile picture</dt>
-  <dd>
+<article class="profile-card">
+  <header>
     <% if @user.profile_picture.present? %>
-      <img src="<%= @user.profile_picture %>" alt="<%= @user.username %> profile picture" style="width: 150px; height: 150px; object-fit: cover;">
+      <img src="<%= @user.profile_picture %>" alt="<%= @user.username %> profile picture" class="profile-avatar">
     <% else %>
-      No profile picture yet.
+      <div class="profile-avatar-placeholder">
+        <%= @user.username.first.upcase %>
+      </div>
     <% end %>
-  </dd>
-</dl>
 
-<p>
-  <a href="/edit_my_profile">Edit profile</a>
-  <a href="/borrow_requests">Borrow requests</a>
-</p>
+    <h1><%= @user.username %></h1>
+    <p><%= @user.email %></p>
 
-<h2>My books</h2>
+    <% if @user.bio.present? %>
+      <p><%= @user.bio %></p>
+    <% end %>
+  </header>
 
-<p>
-  <a href="/search_books">Add a book</a>
-</p>
+  <p class="profile-actions">
+    <a href="/edit_my_profile" role="button">Edit profile</a>
+    <a href="/borrow_requests" role="button" class="secondary">Borrow requests</a>
+  </p>
+</article>
 
-<% if @user.user_books.any? %>
-  <ul>
-    <% @user.user_books.each do |user_book| %>
-      <% book = user_book.book %>
-      <li>
-        <a href="/books/<%= book.id %>"><%= book.title %></a>
-        <% if book.authors.present? %>
-          by <%= book.authors %>
+<article>
+  <header>
+    <h2>My books</h2>
+    <p><a href="/search_books" role="button">Search books</a></p>
+  </header>
+
+  <% if @user.user_books.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Authors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user.user_books.each do |user_book| %>
+          <% book = user_book.book %>
+          <tr>
+            <td><a href="/books/<%= book.id %>"><%= book.title %></a></td>
+            <td><%= book.authors %></td>
+          </tr>
         <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No books yet.</p>
-<% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>Your shelf is empty. Search for a book to add your first one.</p>
+  <% end %>
+</article>

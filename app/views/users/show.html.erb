@@ -1,29 +1,43 @@
-<h1><%= @user.username %></h1>
+<article>
+  <header>
+    <h1><%= @user.username %></h1>
+  </header>
 
-<% if @user.profile_picture.present? %>
-  <p>
-    <img src="<%= @user.profile_picture %>" alt="<%= @user.username %> profile picture" style="width: 150px; height: 150px; object-fit: cover;">
-  </p>
-<% end %>
+  <% if @user.profile_picture.present? %>
+    <p>
+      <img src="<%= @user.profile_picture %>" alt="<%= @user.username %> profile picture" style="width: 150px; height: 150px; object-fit: cover;">
+    </p>
+  <% end %>
 
-<% if @user.bio.present? %>
-  <p><%= @user.bio %></p>
-<% end %>
+  <% if @user.bio.present? %>
+    <p><%= @user.bio %></p>
+  <% end %>
+</article>
 
-<h2>Books</h2>
+<article>
+  <header>
+    <h2>Books</h2>
+  </header>
 
-<% if @user.user_books.any? %>
-  <ul>
-    <% @user.user_books.each do |user_book| %>
-      <% book = user_book.book %>
-      <li>
-        <a href="/books/<%= book.id %>"><%= book.title %></a>
-        <% if book.authors.present? %>
-          by <%= book.authors %>
+  <% if @user.user_books.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Authors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user.user_books.each do |user_book| %>
+          <% book = user_book.book %>
+          <tr>
+            <td><a href="/books/<%= book.id %>"><%= book.title %></a></td>
+            <td><%= book.authors %></td>
+          </tr>
         <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No books yet.</p>
-<% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No books yet.</p>
+  <% end %>
+</article>

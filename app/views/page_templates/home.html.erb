@@ -1,0 +1,69 @@
+<section class="home-hero">
+  <article>
+    <header>
+      <p><strong>Minilib</strong></p>
+      <h1>Your neighborhood bookshelf, online.</h1>
+    </header>
+
+    <p>Build your shelf, discover what your friends are reading, and borrow books from people around you.</p>
+
+    <p class="home-actions">
+      <% if user_signed_in? %>
+        <a href="/my_profile" role="button">Go to my library</a>
+        <a href="/search_books" role="button" class="secondary">Search books</a>
+      <% else %>
+        <a href="/users/sign_up" role="button">Start your shelf</a>
+        <a href="/users/sign_in" role="button" class="secondary">Sign in</a>
+      <% end %>
+    </p>
+  </article>
+</section>
+
+<section>
+  <header>
+    <h2>What you can do</h2>
+  </header>
+
+  <div class="home-feature-grid">
+    <article>
+      <header>
+        <h3>Search real books</h3>
+      </header>
+      <p>Find titles through Google Books by title, author, or ISBN.</p>
+    </article>
+
+    <article>
+      <header>
+        <h3>Build your shelf</h3>
+      </header>
+      <p>Save books you own to your personal library.</p>
+    </article>
+
+    <article>
+      <header>
+        <h3>Share reviews</h3>
+      </header>
+      <p>Leave ratings and reviews on shared book pages.</p>
+    </article>
+
+    <article>
+      <header>
+        <h3>Borrow from others</h3>
+      </header>
+      <p>Request to borrow from a specific owner.</p>
+    </article>
+  </div>
+</section>
+
+<article>
+  <header>
+    <h2>How it works</h2>
+  </header>
+
+  <ol>
+    <li>Search for a book</li>
+    <li>Add it to your shelf</li>
+    <li>Review it or browse other owners</li>
+    <li>Request to borrow from someone nearby</li>
+  </ol>
+</article>
