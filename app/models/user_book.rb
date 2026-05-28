@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: user_books
+#
+#  id         :bigint           not null, primary key
+#  rating     :integer
+#  review     :text
+#  status     :string           default("owned")
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  book_id    :bigint           not null
+#  user_id    :bigint           not null
+#
+# Indexes
+#
+#  index_user_books_on_book_id              (book_id)
+#  index_user_books_on_user_id              (user_id)
+#  index_user_books_on_user_id_and_book_id  (user_id,book_id) UNIQUE
+#
 class UserBook < ApplicationRecord
   belongs_to :user
   belongs_to :book

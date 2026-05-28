@@ -10,21 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_28_001000) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_28_002000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
-    t.string "author", null: false
     t.text "description"
     t.string "cover_image_url"
-    t.integer "rating"
-    t.text "review"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_books_on_user_id"
+    t.string "google_books_id", null: false
+    t.string "authors"
+    t.string "isbn_10"
+    t.string "isbn_13"
+    t.string "published_date"
+    t.string "publisher"
+    t.index ["google_books_id"], name: "index_books_on_google_books_id", unique: true
   end
 
   create_table "borrow_requests", force: :cascade do |t|
@@ -37,7 +39,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_28_001000) do
     t.datetime "updated_at", null: false
     t.index ["book_id"], name: "index_borrow_requests_on_book_id"
     t.index ["owner_id"], name: "index_borrow_requests_on_owner_id"
-    t.index ["requester_id", "book_id", "status"], name: "index_borrow_requests_on_requester_id_and_book_id_and_status", unique: true, where: "((status)::text = 'pending'::text)"
+    t.index ["requester_id", "owner_id", "book_id", "status"], name: "index_pending_borrow_requests_unique_owner_book", unique: true, where: "((status)::text = 'pending'::text)"
     t.index ["requester_id"], name: "index_borrow_requests_on_requester_id"
   end
 
@@ -181,6 +183,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_28_001000) do
     t.index ["expires_at"], name: "index_solid_queue_semaphores_on_expires_at"
     t.index ["key", "value"], name: "index_solid_queue_semaphores_on_key_and_value"
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
+  end
+
+  create_table "user_books", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "book_id", null: false
+    t.integer "rating"
+    t.text "review"
+    t.string "status", default: "owned"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_user_books_on_book_id"
+    t.index ["user_id", "book_id"], name: "index_user_books_on_user_id_and_book_id", unique: true
+    t.index ["user_id"], name: "index_user_books_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

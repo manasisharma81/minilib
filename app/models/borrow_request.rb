@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: borrow_requests
+#
+#  id           :bigint           not null, primary key
+#  message      :text
+#  status       :string           default("pending"), not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  book_id      :bigint           not null
+#  owner_id     :bigint           not null
+#  requester_id :bigint           not null
+#
+# Indexes
+#
+#  index_borrow_requests_on_book_id                 (book_id)
+#  index_borrow_requests_on_owner_id                (owner_id)
+#  index_borrow_requests_on_requester_id            (requester_id)
+#  index_pending_borrow_requests_unique_owner_book  (requester_id,owner_id,book_id,status) UNIQUE WHERE ((status)::text = 'pending'::text)
+#
 class BorrowRequest < ApplicationRecord
   belongs_to :requester, class_name: "User"
   belongs_to :owner, class_name: "User"
