@@ -30,15 +30,18 @@
 <h2>My books</h2>
 
 <p>
-  <a href="/insert_book_form">Add a book</a>
+  <a href="/search_books">Add a book</a>
 </p>
 
-<% if @user.books.any? %>
+<% if @user.user_books.any? %>
   <ul>
-    <% @user.books.each do |book| %>
+    <% @user.user_books.each do |user_book| %>
+      <% book = user_book.book %>
       <li>
         <a href="/books/<%= book.id %>"><%= book.title %></a>
-        by <%= book.author %>
+        <% if book.authors.present? %>
+          by <%= book.authors %>
+        <% end %>
       </li>
     <% end %>
   </ul>

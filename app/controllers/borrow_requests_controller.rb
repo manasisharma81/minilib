@@ -10,24 +10,34 @@ class BorrowRequestsController < ApplicationController
 
   def create_row
     the_book_id = params.fetch("path_book_id")
+    the_owner_id = params.fetch("path_owner_id")
     @book = Book.where({ :id => the_book_id }).at(0)
+    @owner = User.where({ :id => the_owner_id }).at(0)
 
     if @book == nil
       redirect_to("/books", { :alert => "Book not found." })
-    elsif @book.user_id == current_user.id
-      redirect_to("/books/" + @book.id.to_s, { :alert => "You cannot request your own book." })
+    elsif @owner == nil
+      redirect_to("/books/" + @book.id.to_s, { :alert => "Owner not found." })
+    elsif @owner.id == current_user.id
+      redirect_to("/books/" + @book.id.to_s, { :alert => "You cannot request your own copy." })
     else
-      @borrow_request = BorrowRequest.new
-      @borrow_request.requester_id = current_user.id
-      @borrow_request.owner_id = @book.user_id
-      @borrow_request.book_id = @book.id
-      @borrow_request.status = "pending"
-      @borrow_request.message = params.fetch("query_message")
+      ownership = UserBook.where({ :user_id => @owner.id, :book_id => @book.id }).at(0)
 
-      if @borrow_request.save
-        redirect_to("/books/" + @book.id.to_s, { :notice => "Borrow request sent." })
+      if ownership == nil
+        redirect_to("/books/" + @book.id.to_s, { :alert => "That user does not own this book." })
       else
-        redirect_to("/books/" + @book.id.to_s, { :alert => @borrow_request.errors.full_messages.join(", ") })
+        @borrow_request = BorrowRequest.new
+        @borrow_request.requester_id = current_user.id
+        @borrow_request.owner_id = @owner.id
+        @borrow_request.book_id = @book.id
+        @borrow_request.status = "pending"
+        @borrow_request.message = params.fetch("query_message")
+
+        if @borrow_request.save
+          redirect_to("/books/" + @book.id.to_s, { :notice => "Borrow request sent." })
+        else
+          redirect_to("/books/" + @book.id.to_s, { :alert => @borrow_request.errors.full_messages.join(", ") })
+        end
       end
     end
   end

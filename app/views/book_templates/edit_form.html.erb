@@ -1,49 +1,31 @@
-<h1>Edit book</h1>
+<h1>Edit my ownership/review</h1>
 
-<% if @book.errors.any? %>
+<h2><%= @user_book.book.title %></h2>
+
+<% if @user_book.errors.any? %>
   <ul>
-    <% @book.errors.full_messages.each do |message| %>
+    <% @user_book.errors.full_messages.each do |message| %>
       <li><%= message %></li>
     <% end %>
   </ul>
 <% end %>
 
-<form action="/update_book/<%= @book.id %>" method="post">
+<form action="/update_book/<%= @user_book.id %>" method="post">
   <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
   <div>
-    <label for="title_box">Title</label>
-    <input type="text" id="title_box" name="query_title" value="<%= @book.title %>">
+    <label for="rating_box">My rating</label>
+    <input type="number" id="rating_box" name="query_rating" value="<%= @user_book.rating %>">
   </div>
 
   <div>
-    <label for="author_box">Author</label>
-    <input type="text" id="author_box" name="query_author" value="<%= @book.author %>">
+    <label for="review_box">My review</label>
+    <textarea id="review_box" name="query_review"><%= @user_book.review %></textarea>
   </div>
 
-  <div>
-    <label for="description_box">Description</label>
-    <textarea id="description_box" name="query_description"><%= @book.description %></textarea>
-  </div>
-
-  <div>
-    <label for="cover_image_url_box">Cover image URL</label>
-    <input type="text" id="cover_image_url_box" name="query_cover_image_url" value="<%= @book.cover_image_url %>">
-  </div>
-
-  <div>
-    <label for="rating_box">Rating</label>
-    <input type="number" id="rating_box" name="query_rating" value="<%= @book.rating %>">
-  </div>
-
-  <div>
-    <label for="review_box">Review</label>
-    <textarea id="review_box" name="query_review"><%= @book.review %></textarea>
-  </div>
-
-  <button type="submit">Update book</button>
+  <button type="submit">Update my ownership/review</button>
 </form>
 
 <p>
-  <a href="/books/<%= @book.id %>">Cancel</a>
+  <a href="/books/<%= @user_book.book_id %>">Cancel</a>
 </p>

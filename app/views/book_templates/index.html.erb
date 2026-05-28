@@ -1,17 +1,26 @@
 <h1>My books</h1>
 
 <p>
-  <a href="/insert_book_form">Add a book</a>
+  <a href="/search_books">Add a book</a>
 </p>
 
-<% if @books.any? %>
+<% if @user_books.any? %>
   <ul>
-    <% @books.each do |book| %>
+    <% @user_books.each do |user_book| %>
+      <% book = user_book.book %>
       <li>
+        <% if book.cover_image_url.present? %>
+          <img src="<%= book.cover_image_url %>" alt="<%= book.title %> cover" style="width: 75px; height: 110px; object-fit: cover;">
+        <% end %>
+
         <a href="/books/<%= book.id %>"><%= book.title %></a>
-        by <%= book.author %>
-        <a href="/modify_book/<%= book.id %>">Edit</a>
-        <a href="/delete_book/<%= book.id %>">Delete</a>
+
+        <% if book.authors.present? %>
+          by <%= book.authors %>
+        <% end %>
+
+        <a href="/modify_book/<%= user_book.id %>">Edit my ownership/review</a>
+        <a href="/delete_book/<%= user_book.id %>">Remove from my books</a>
       </li>
     <% end %>
   </ul>

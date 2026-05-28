@@ -12,12 +12,15 @@
 
 <h2>Books</h2>
 
-<% if @user.books.any? %>
+<% if @user.user_books.any? %>
   <ul>
-    <% @user.books.each do |book| %>
+    <% @user.user_books.each do |user_book| %>
+      <% book = user_book.book %>
       <li>
         <a href="/books/<%= book.id %>"><%= book.title %></a>
-        by <%= book.author %>
+        <% if book.authors.present? %>
+          by <%= book.authors %>
+        <% end %>
       </li>
     <% end %>
   </ul>

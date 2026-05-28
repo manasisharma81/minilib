@@ -1,11 +1,10 @@
 <h1><%= @book.title %></h1>
 
 <dl>
-  <dt>Author</dt>
-  <dd><%= @book.author %></dd>
-
-  <dt>Owner</dt>
-  <dd><a href="/users/<%= @book.user.id %>"><%= @book.user.username %></a></dd>
+  <% if @book.authors.present? %>
+    <dt>Authors</dt>
+    <dd><%= @book.authors %></dd>
+  <% end %>
 
   <% if @book.cover_image_url.present? %>
     <dt>Cover image</dt>
@@ -14,42 +13,89 @@
     </dd>
   <% end %>
 
+  <% if @book.publisher.present? %>
+    <dt>Publisher</dt>
+    <dd><%= @book.publisher %></dd>
+  <% end %>
+
+  <% if @book.published_date.present? %>
+    <dt>Published date</dt>
+    <dd><%= @book.published_date %></dd>
+  <% end %>
+
+  <% if @book.isbn_10.present? %>
+    <dt>ISBN 10</dt>
+    <dd><%= @book.isbn_10 %></dd>
+  <% end %>
+
+  <% if @book.isbn_13.present? %>
+    <dt>ISBN 13</dt>
+    <dd><%= @book.isbn_13 %></dd>
+  <% end %>
+
   <% if @book.description.present? %>
     <dt>Description</dt>
     <dd><%= @book.description %></dd>
   <% end %>
-
-  <% if @book.rating.present? %>
-    <dt>Rating</dt>
-    <dd><%= @book.rating %></dd>
-  <% end %>
-
-  <% if @book.review.present? %>
-    <dt>Review</dt>
-    <dd><%= @book.review %></dd>
-  <% end %>
 </dl>
 
-<% if @book.user_id != current_user.id %>
-  <h2>Request to borrow</h2>
+<h2>Owners</h2>
 
-  <form action="/create_borrow_request/<%= @book.id %>" method="post">
-    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<% if @book.user_books.any? %>
+  <ul>
+    <% @book.user_books.each do |user_book| %>
+      <% owner = user_book.user %>
+      <li>
+        <a href="/users/<%= owner.id %>"><%= owner.username %></a>
 
-    <div>
-      <label for="message_box">Message</label>
-      <textarea id="message_box" name="query_message"></textarea>
-    </div>
+        <% if owner.id != current_user.id %>
+          <form action="/create_borrow_request/<%= @book.id %>/<%= owner.id %>" method="post">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
-    <button type="submit">Request to borrow</button>
-  </form>
+            <div>
+              <label for="message_box_<%= owner.id %>">Message</label>
+              <textarea id="message_box_<%= owner.id %>" name="query_message"></textarea>
+            </div>
+
+            <button type="submit">Request to borrow from <%= owner.username %></button>
+          </form>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No owners yet.</p>
+<% end %>
+
+<h2>Reviews</h2>
+
+<% if @book.user_books.any? %>
+  <ul>
+    <% @book.user_books.each do |user_book| %>
+      <% if user_book.rating.present? || user_book.review.present? %>
+        <li>
+          <a href="/users/<%= user_book.user.id %>"><%= user_book.user.username %></a>
+
+          <% if user_book.rating.present? %>
+            rated this <%= user_book.rating %>/5
+          <% end %>
+
+          <% if user_book.review.present? %>
+            <p><%= user_book.review %></p>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No reviews yet.</p>
 <% end %>
 
 <p>
-  <% if @book.user_id == current_user.id %>
-    <a href="/modify_book/<%= @book.id %>">Edit book</a>
-    <a href="/delete_book/<%= @book.id %>">Delete book</a>
+  <% if @current_user_book != nil %>
+    <a href="/modify_book/<%= @current_user_book.id %>">Edit my ownership/review</a>
+    <a href="/delete_book/<%= @current_user_book.id %>">Remove from my books</a>
   <% end %>
 
-  <a href="/books">Back to books</a>
+  <a href="/books">Back to my books</a>
 </p>
