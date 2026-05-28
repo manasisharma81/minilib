@@ -1,7 +1,10 @@
 <article>
   <header>
     <h1>My books</h1>
-    <p><a href="/search_books">Search books</a></p>
+    <p class="table-note">
+      <a href="/search_books">Search books</a>
+      <span class="muted-text">Find something new for your shelf.</span>
+    </p>
   </header>
 
   <% if @user_books.any? %>
@@ -10,6 +13,7 @@
         <tr>
           <th>Cover</th>
           <th>Book</th>
+          <th>Loan status</th>
           <th>My rating</th>
           <th>My review</th>
           <th>Review actions</th>
@@ -33,35 +37,50 @@
               <% end %>
             </td>
             <td>
+              <% if user_book.availability_status.blank? %>
+                <span class="muted-text">Not specified</span>
+              <% elsif user_book.availability_status == "available" %>
+                Available for loan
+              <% elsif user_book.availability_status == "rented_out" %>
+                Rented out
+              <% end %>
+            </td>
+            <td>
               <% if user_book.rating.present? %>
                 <% filled_stars = "★" * user_book.rating %>
                 <% empty_stars = "☆" * (5 - user_book.rating) %>
-                <%= filled_stars + empty_stars %>
+                <span><%= filled_stars + empty_stars %></span>
                 <br>
-                <small><%= user_book.rating %>/5</small>
+                <small class="muted-text"><%= user_book.rating %>/5</small>
               <% else %>
-                Not rated yet
+                <span class="muted-text">Not rated yet</span>
               <% end %>
             </td>
             <td>
               <% if user_book.review.present? %>
                 <%= truncate(user_book.review, length: 120) %>
               <% else %>
-                No review yet
+                <span class="muted-text">No review yet</span>
               <% end %>
             </td>
             <td>
-              <a href="/modify_book/<%= user_book.id %>" role="button">Edit review</a>
+              <div class="compact-table-actions">
+                <a href="/modify_book/<%= user_book.id %>" role="button">Edit review</a>
+              </div>
             </td>
             <td>
-              <a href="/delete_book/<%= user_book.id %>" role="button" class="secondary">Remove from my books</a>
+              <div class="compact-table-actions">
+                <a href="/delete_book/<%= user_book.id %>" role="button" class="secondary">Remove</a>
+              </div>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
   <% else %>
-    <p>No books yet.</p>
+    <article>
+      <p>Your shelf is empty. Search for a book to add your first one.</p>
+    </article>
   <% end %>
 </article>
 

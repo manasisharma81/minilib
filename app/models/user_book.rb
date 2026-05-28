@@ -2,14 +2,15 @@
 #
 # Table name: user_books
 #
-#  id         :bigint           not null, primary key
-#  rating     :integer
-#  review     :text
-#  status     :string           default("owned")
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  book_id    :bigint           not null
-#  user_id    :bigint           not null
+#  id                  :bigint           not null, primary key
+#  availability_status :string
+#  rating              :integer
+#  review              :text
+#  status              :string           default("owned")
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  book_id             :bigint           not null
+#  user_id             :bigint           not null
 #
 # Indexes
 #
@@ -25,4 +26,5 @@ class UserBook < ApplicationRecord
   validates :book_id, presence: true
   validates :book_id, uniqueness: { scope: :user_id }
   validates :rating, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5 }, allow_blank: true
+  validates :availability_status, inclusion: { in: [ "available", "rented_out" ] }, allow_blank: true
 end

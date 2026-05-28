@@ -1,9 +1,13 @@
-<article>
+<article class="borrow-conversation-grid">
   <header>
     <h1>Borrow conversation</h1>
+    <span class="inline-status is-<%= @borrow_request.status %>"><%= @borrow_request.status.humanize %></span>
+    <% if @borrow_request.status == "closed" || @borrow_request.status == "denied" %>
+      <p class="muted-text">Conversation archived.</p>
+    <% end %>
   </header>
 
-  <section>
+  <section class="request-card">
     <h2><a href="/books/<%= @borrow_request.book.id %>"><%= @borrow_request.book.title %></a></h2>
     <p>
       <strong>Requester:</strong>
@@ -15,19 +19,16 @@
     </p>
     <p>
       <strong>Status:</strong>
-      <%= @borrow_request.status %>
+      <%= @borrow_request.status.humanize %>
     </p>
-    <% if @borrow_request.status == "closed" %>
-      <p><strong>Conversation closed</strong></p>
-    <% end %>
   </section>
 
-  <section>
+  <section class="request-card">
     <h3>Original request note</h3>
     <% if @borrow_request.message.present? %>
-      <p><%= @borrow_request.message %></p>
+      <p class="borrow-request-note"><%= @borrow_request.message %></p>
     <% else %>
-      <p>No original note.</p>
+      <p class="muted-text">No original request note.</p>
     <% end %>
   </section>
 </article>
@@ -38,17 +39,19 @@
   </header>
 
   <% if @borrow_messages.any? %>
-    <% @borrow_messages.each do |borrow_message| %>
-      <article>
-        <header>
-          <strong><a href="/users/<%= borrow_message.user.id %>"><%= borrow_message.user.username %></a></strong>
-          <span><%= borrow_message.created_at.strftime("%b %-d, %Y at %-I:%M %p") %></span>
-        </header>
-        <p><%= simple_format(borrow_message.body) %></p>
-      </article>
-    <% end %>
+    <div class="borrow-conversation-messages">
+      <% @borrow_messages.each do |borrow_message| %>
+        <article class="borrow-message-card">
+          <header class="review-meta">
+            <strong><a href="/users/<%= borrow_message.user.id %>"><%= borrow_message.user.username %></a></strong>
+            <small class="muted-text"><%= borrow_message.created_at.strftime("%b %-d, %Y at %-I:%M %p") %></small>
+          </header>
+          <p><%= simple_format(borrow_message.body) %></p>
+        </article>
+      <% end %>
+    </div>
   <% else %>
-    <p>No messages yet.</p>
+    <p class="muted-text">No messages yet.</p>
   <% end %>
 </article>
 
@@ -57,22 +60,21 @@
     <h2>Reply</h2>
   </header>
 
-  <% if @borrow_request.status == "closed" %>
-    <p>Conversation closed</p>
+  <% if @borrow_request.status == "closed" || @borrow_request.status == "denied" %>
+    <p class="muted-text">Conversation archived.</p>
   <% else %>
     <form action="/create_borrow_message/<%= @borrow_request.id %>" method="post">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
-      <div>
-        <label for="query_body">Message</label>
-        <textarea id="query_body" name="query_body" rows="5"></textarea>
-      </div>
+      <label for="query_body">Message</label>
+      <textarea id="query_body" name="query_body" rows="5" placeholder="Example: Would Friday afternoon work for pickup?"></textarea>
+      <small class="helper-text">Example: Would Friday afternoon work for pickup?</small>
 
       <button type="submit">Send message</button>
     </form>
   <% end %>
 
-  <% if @borrow_request.status != "closed" %>
+  <% if @borrow_request.status != "closed" && @borrow_request.status != "denied" %>
     <p>
       <a href="/close_borrow_request/<%= @borrow_request.id %>">Close conversation</a>
     </p>

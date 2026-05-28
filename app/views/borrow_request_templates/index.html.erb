@@ -3,59 +3,148 @@
 <article>
   <header>
     <h2>Incoming requests</h2>
+    <p class="table-note">Requests other users sent to you.</p>
   </header>
 
   <% if @incoming_requests.any? %>
-    <ul>
+    <div class="borrow-request-list">
       <% @incoming_requests.each do |borrow_request| %>
-        <li>
-          <a href="/books/<%= borrow_request.book.id %>"><%= borrow_request.book.title %></a>
-          requested by
-          <a href="/users/<%= borrow_request.requester.id %>"><%= borrow_request.requester.username %></a>
-          - <%= borrow_request.status %>
-          - <a href="/borrow_requests/<%= borrow_request.id %>">View conversation</a>
+        <article class="request-card">
+          <header class="review-meta">
+            <a href="/books/<%= borrow_request.book.id %>"><%= borrow_request.book.title %></a>
+            <span class="inline-status is-<%= borrow_request.status %>"><%= borrow_request.status.humanize %></span>
+            <a href="/borrow_requests/<%= borrow_request.id %>">View conversation</a>
+          </header>
+
+          <p>
+            Requested by
+            <a href="/users/<%= borrow_request.requester.id %>"><%= borrow_request.requester.username %></a>
+          </p>
 
           <% if borrow_request.message.present? %>
-            <p><%= borrow_request.message %></p>
+            <p class="borrow-request-note"><%= borrow_request.message %></p>
+          <% else %>
+            <p class="muted-text">No request note.</p>
           <% end %>
 
           <% if borrow_request.status == "pending" %>
-            <a href="/approve_borrow_request/<%= borrow_request.id %>">Approve</a>
-            <a href="/deny_borrow_request/<%= borrow_request.id %>">Deny</a>
+            <div class="compact-table-actions">
+              <a href="/approve_borrow_request/<%= borrow_request.id %>" role="button">Approve</a>
+              <a href="/deny_borrow_request/<%= borrow_request.id %>" role="button" class="secondary">Deny</a>
+            </div>
           <% end %>
-        </li>
+        </article>
       <% end %>
-    </ul>
+    </div>
   <% else %>
-    <p>No incoming requests.</p>
+    <p class="muted-text">No incoming requests yet.</p>
   <% end %>
 </article>
 
 <article>
   <header>
     <h2>Outgoing requests</h2>
+    <p class="table-note">Requests you sent to other owners.</p>
   </header>
 
   <% if @outgoing_requests.any? %>
-    <ul>
+    <div class="borrow-request-list">
       <% @outgoing_requests.each do |borrow_request| %>
-        <li>
-          <a href="/books/<%= borrow_request.book.id %>"><%= borrow_request.book.title %></a>
-          owned by
-          <a href="/users/<%= borrow_request.owner.id %>"><%= borrow_request.owner.username %></a>
-          - <%= borrow_request.status %>
-          - <a href="/borrow_requests/<%= borrow_request.id %>">View conversation</a>
+        <article class="request-card">
+          <header class="review-meta">
+            <a href="/books/<%= borrow_request.book.id %>"><%= borrow_request.book.title %></a>
+            <span class="inline-status is-<%= borrow_request.status %>"><%= borrow_request.status.humanize %></span>
+            <a href="/borrow_requests/<%= borrow_request.id %>">View conversation</a>
+          </header>
+
+          <p>
+            Owned by
+            <a href="/users/<%= borrow_request.owner.id %>"><%= borrow_request.owner.username %></a>
+          </p>
 
           <% if borrow_request.message.present? %>
-            <p><%= borrow_request.message %></p>
+            <p class="borrow-request-note"><%= borrow_request.message %></p>
+          <% else %>
+            <p class="muted-text">No request note.</p>
           <% end %>
-        </li>
+        </article>
       <% end %>
-    </ul>
+    </div>
   <% else %>
-    <p>No outgoing requests.</p>
+    <p class="muted-text">No outgoing requests yet.</p>
   <% end %>
 </article>
+
+<details class="request-card deleted-bin">
+  <summary>Deleted bin</summary>
+  <p class="table-note">Closed and denied requests are archived here. Click to expand.</p>
+
+  <article>
+    <header>
+      <h3>Deleted incoming requests</h3>
+    </header>
+
+    <% if @deleted_incoming_requests.any? %>
+      <div class="borrow-request-list">
+        <% @deleted_incoming_requests.each do |borrow_request| %>
+          <article class="request-card">
+            <header class="review-meta">
+              <a href="/books/<%= borrow_request.book.id %>"><%= borrow_request.book.title %></a>
+              <span class="inline-status is-<%= borrow_request.status %>"><%= borrow_request.status.humanize %></span>
+              <a href="/borrow_requests/<%= borrow_request.id %>">View conversation</a>
+            </header>
+
+            <p>
+              Requested by
+              <a href="/users/<%= borrow_request.requester.id %>"><%= borrow_request.requester.username %></a>
+            </p>
+
+            <% if borrow_request.message.present? %>
+              <p class="borrow-request-note"><%= borrow_request.message %></p>
+            <% else %>
+              <p class="muted-text">No request note.</p>
+            <% end %>
+          </article>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="muted-text">No deleted incoming requests yet.</p>
+    <% end %>
+  </article>
+
+  <article>
+    <header>
+      <h3>Deleted outgoing requests</h3>
+    </header>
+
+    <% if @deleted_outgoing_requests.any? %>
+      <div class="borrow-request-list">
+        <% @deleted_outgoing_requests.each do |borrow_request| %>
+          <article class="request-card">
+            <header class="review-meta">
+              <a href="/books/<%= borrow_request.book.id %>"><%= borrow_request.book.title %></a>
+              <span class="inline-status is-<%= borrow_request.status %>"><%= borrow_request.status.humanize %></span>
+              <a href="/borrow_requests/<%= borrow_request.id %>">View conversation</a>
+            </header>
+
+            <p>
+              Owned by
+              <a href="/users/<%= borrow_request.owner.id %>"><%= borrow_request.owner.username %></a>
+            </p>
+
+            <% if borrow_request.message.present? %>
+              <p class="borrow-request-note"><%= borrow_request.message %></p>
+            <% else %>
+              <p class="muted-text">No request note.</p>
+            <% end %>
+          </article>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="muted-text">No deleted outgoing requests yet.</p>
+    <% end %>
+  </article>
+</details>
 
 <p>
   <a href="/my_profile">Back to profile</a>

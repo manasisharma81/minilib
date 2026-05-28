@@ -9,8 +9,8 @@ class BorrowMessagesController < ApplicationController
       redirect_to("/borrow_requests", { :alert => "Borrow request not found." })
     elsif !current_user_is_participant?
       redirect_to("/borrow_requests", { :alert => "You are not part of that conversation." })
-    elsif @borrow_request.status == "closed"
-      redirect_to("/borrow_requests/" + @borrow_request.id.to_s, { :alert => "Conversation closed." })
+    elsif @borrow_request.status == "closed" || @borrow_request.status == "denied"
+      redirect_to("/borrow_requests/" + @borrow_request.id.to_s, { :alert => "Conversation archived." })
     else
       @borrow_message = BorrowMessage.new
       @borrow_message.borrow_request_id = @borrow_request.id

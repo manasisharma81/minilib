@@ -2,6 +2,7 @@
   <header>
     <h1>Edit my ownership/review</h1>
     <p><%= @user_book.book.title %></p>
+    <p class="table-note">Use this page to update your rating, review, and loan status.</p>
   </header>
 
   <% if @user_book.errors.any? %>
@@ -17,9 +18,19 @@
 
     <label for="rating_box">My rating</label>
     <input type="number" id="rating_box" name="query_rating" value="<%= @user_book.rating %>">
+    <small class="helper-text">Use a 1–5 scale, where 5 is the strongest recommendation.</small>
 
     <label for="review_box">My review</label>
     <textarea id="review_box" name="query_review"><%= @user_book.review %></textarea>
+    <small class="helper-text">Share what you liked, disliked, or who you’d recommend this to.</small>
+
+    <label for="availability_status_box">Loan status</label>
+    <select id="availability_status_box" name="query_availability_status">
+      <option value="" <%= "selected" if @user_book.availability_status.blank? %>>Not specified</option>
+      <option value="available" <%= "selected" if @user_book.availability_status == "available" %>>Available for loan</option>
+      <option value="rented_out" <%= "selected" if @user_book.availability_status == "rented_out" %>>Rented out</option>
+    </select>
+    <small class="helper-text">Let other users know whether this copy is available to borrow.</small>
 
     <button type="submit">Update my ownership/review</button>
   </form>

@@ -111,6 +111,7 @@ class BooksController < ApplicationController
     else
       @user_book.rating = params.fetch("query_rating")
       @user_book.review = params.fetch("query_review")
+      @user_book.availability_status = params.fetch("query_availability_status")
 
       if @user_book.save
         redirect_to("/books/" + @user_book.book_id.to_s, { :notice => "Your ownership and review were updated." })

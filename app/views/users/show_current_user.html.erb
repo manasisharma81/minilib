@@ -9,7 +9,7 @@
     <% end %>
 
     <h1><%= @user.username %></h1>
-    <p><%= @user.email %></p>
+    <p class="muted-text"><%= @user.email %></p>
 
     <% if @user.bio.present? %>
       <p><%= @user.bio %></p>
@@ -25,7 +25,10 @@
 <article>
   <header>
     <h2>My books</h2>
-    <p><a href="/search_books" role="button">Search books</a></p>
+    <p class="table-note">
+      <a href="/search_books" role="button">Search books</a>
+      <span class="muted-text">Your shelf is empty until you add your first book.</span>
+    </p>
   </header>
 
   <% if @user.user_books.any? %>
@@ -47,6 +50,6 @@
       </tbody>
     </table>
   <% else %>
-    <p>Your shelf is empty. Search for a book to add your first one.</p>
+    <p class="muted-text">Your shelf is empty. Search for a book to add your first one.</p>
   <% end %>
 </article>

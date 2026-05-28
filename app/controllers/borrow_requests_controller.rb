@@ -2,8 +2,11 @@ class BorrowRequestsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @incoming_requests = current_user.incoming_borrow_requests
-    @outgoing_requests = current_user.outgoing_borrow_requests
+    deleted_statuses = [ "denied", "closed" ]
+    @incoming_requests = current_user.incoming_borrow_requests.where.not({ :status => deleted_statuses })
+    @outgoing_requests = current_user.outgoing_borrow_requests.where.not({ :status => deleted_statuses })
+    @deleted_incoming_requests = current_user.incoming_borrow_requests.where({ :status => deleted_statuses })
+    @deleted_outgoing_requests = current_user.outgoing_borrow_requests.where({ :status => deleted_statuses })
 
     render({ :template => "borrow_request_templates/index" })
   end
