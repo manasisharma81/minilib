@@ -1,0 +1,49 @@
+<h1>Add a book</h1>
+
+<% if @book.errors.any? %>
+  <ul>
+    <% @book.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<form action="/create_book" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+  <div>
+    <label for="title_box">Title</label>
+    <input type="text" id="title_box" name="query_title" value="<%= @book.title %>">
+  </div>
+
+  <div>
+    <label for="author_box">Author</label>
+    <input type="text" id="author_box" name="query_author" value="<%= @book.author %>">
+  </div>
+
+  <div>
+    <label for="description_box">Description</label>
+    <textarea id="description_box" name="query_description"><%= @book.description %></textarea>
+  </div>
+
+  <div>
+    <label for="cover_image_url_box">Cover image URL</label>
+    <input type="text" id="cover_image_url_box" name="query_cover_image_url" value="<%= @book.cover_image_url %>">
+  </div>
+
+  <div>
+    <label for="rating_box">Rating</label>
+    <input type="number" id="rating_box" name="query_rating" value="<%= @book.rating %>">
+  </div>
+
+  <div>
+    <label for="review_box">Review</label>
+    <textarea id="review_box" name="query_review"><%= @book.review %></textarea>
+  </div>
+
+  <button type="submit">Create book</button>
+</form>
+
+<p>
+  <a href="/books">Cancel</a>
+</p>

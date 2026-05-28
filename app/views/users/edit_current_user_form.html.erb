@@ -1,0 +1,39 @@
+<h1>Edit my profile</h1>
+
+<% if @user.errors.any? %>
+  <ul>
+    <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<form action="/update_my_profile" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+  <div>
+    <label for="username_box">Username</label>
+    <input type="text" id="username_box" name="query_username" value="<%= @user.username %>">
+  </div>
+
+  <div>
+    <label for="email_box">Email</label>
+    <input type="email" id="email_box" name="query_email" value="<%= @user.email %>">
+  </div>
+
+  <div>
+    <label for="bio_box">Bio</label>
+    <textarea id="bio_box" name="query_bio"><%= @user.bio %></textarea>
+  </div>
+
+  <div>
+    <label for="profile_picture_box">Profile picture</label>
+    <input type="text" id="profile_picture_box" name="query_profile_picture" value="<%= @user.profile_picture %>">
+  </div>
+
+  <button type="submit">Update profile</button>
+</form>
+
+<p>
+  <a href="/my_profile">Cancel</a>
+</p>

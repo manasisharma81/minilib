@@ -1,0 +1,24 @@
+<h1>My books</h1>
+
+<p>
+  <a href="/insert_book_form">Add a book</a>
+</p>
+
+<% if @books.any? %>
+  <ul>
+    <% @books.each do |book| %>
+      <li>
+        <a href="/books/<%= book.id %>"><%= book.title %></a>
+        by <%= book.author %>
+        <a href="/modify_book/<%= book.id %>">Edit</a>
+        <a href="/delete_book/<%= book.id %>">Delete</a>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No books yet.</p>
+<% end %>
+
+<p>
+  <a href="/my_profile">Back to profile</a>
+</p>
