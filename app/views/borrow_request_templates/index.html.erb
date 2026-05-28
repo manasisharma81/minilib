@@ -1,0 +1,52 @@
+<h1>Borrow requests</h1>
+
+<h2>Incoming requests</h2>
+
+<% if @incoming_requests.any? %>
+  <ul>
+    <% @incoming_requests.each do |borrow_request| %>
+      <li>
+        <a href="/books/<%= borrow_request.book.id %>"><%= borrow_request.book.title %></a>
+        requested by
+        <a href="/users/<%= borrow_request.requester.id %>"><%= borrow_request.requester.username %></a>
+        - <%= borrow_request.status %>
+
+        <% if borrow_request.message.present? %>
+          <p><%= borrow_request.message %></p>
+        <% end %>
+
+        <% if borrow_request.status == "pending" %>
+          <a href="/approve_borrow_request/<%= borrow_request.id %>">Approve</a>
+          <a href="/deny_borrow_request/<%= borrow_request.id %>">Deny</a>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No incoming requests.</p>
+<% end %>
+
+<h2>Outgoing requests</h2>
+
+<% if @outgoing_requests.any? %>
+  <ul>
+    <% @outgoing_requests.each do |borrow_request| %>
+      <li>
+        <a href="/books/<%= borrow_request.book.id %>"><%= borrow_request.book.title %></a>
+        owned by
+        <a href="/users/<%= borrow_request.owner.id %>"><%= borrow_request.owner.username %></a>
+        - <%= borrow_request.status %>
+
+        <% if borrow_request.message.present? %>
+          <p><%= borrow_request.message %></p>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No outgoing requests.</p>
+<% end %>
+
+<p>
+  <a href="/my_profile">Back to profile</a>
+</p>

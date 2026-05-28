@@ -30,8 +30,26 @@
   <% end %>
 </dl>
 
+<% if @book.user_id != current_user.id %>
+  <h2>Request to borrow</h2>
+
+  <form action="/create_borrow_request/<%= @book.id %>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+    <div>
+      <label for="message_box">Message</label>
+      <textarea id="message_box" name="query_message"></textarea>
+    </div>
+
+    <button type="submit">Request to borrow</button>
+  </form>
+<% end %>
+
 <p>
-  <a href="/modify_book/<%= @book.id %>">Edit book</a>
-  <a href="/delete_book/<%= @book.id %>">Delete book</a>
+  <% if @book.user_id == current_user.id %>
+    <a href="/modify_book/<%= @book.id %>">Edit book</a>
+    <a href="/delete_book/<%= @book.id %>">Delete book</a>
+  <% end %>
+
   <a href="/books">Back to books</a>
 </p>

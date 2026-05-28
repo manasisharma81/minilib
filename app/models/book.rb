@@ -19,6 +19,7 @@
 #
 class Book < ApplicationRecord
   belongs_to :user
+  has_many :borrow_requests
 
   validates :title, presence: true
   validates :author, presence: true

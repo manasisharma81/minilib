@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_28_000000) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_28_001000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,6 +25,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_28_000000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_books_on_user_id"
+  end
+
+  create_table "borrow_requests", force: :cascade do |t|
+    t.bigint "requester_id", null: false
+    t.bigint "owner_id", null: false
+    t.bigint "book_id", null: false
+    t.string "status", default: "pending", null: false
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_borrow_requests_on_book_id"
+    t.index ["owner_id"], name: "index_borrow_requests_on_owner_id"
+    t.index ["requester_id", "book_id", "status"], name: "index_borrow_requests_on_requester_id_and_book_id_and_status", unique: true, where: "((status)::text = 'pending'::text)"
+    t.index ["requester_id"], name: "index_borrow_requests_on_requester_id"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|

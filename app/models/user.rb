@@ -19,6 +19,8 @@
 #
 class User < ApplicationRecord
   has_many :books
+  has_many :incoming_borrow_requests, class_name: "BorrowRequest", foreign_key: "owner_id"
+  has_many :outgoing_borrow_requests, class_name: "BorrowRequest", foreign_key: "requester_id"
 
   devise :database_authenticatable, :registerable,
     :rememberable, :validatable

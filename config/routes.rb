@@ -15,6 +15,11 @@ get("/modify_book/:path_id", { :controller => "books", :action => "edit_form" })
 post("/update_book/:path_id", { :controller => "books", :action => "update_row" })
 get("/delete_book/:path_id", { :controller => "books", :action => "destroy_row" })
 
+get("/borrow_requests", { :controller => "borrow_requests", :action => "index" })
+post("/create_borrow_request/:path_book_id", { :controller => "borrow_requests", :action => "create_row" })
+get("/approve_borrow_request/:path_id", { :controller => "borrow_requests", :action => "approve" })
+get("/deny_borrow_request/:path_id", { :controller => "borrow_requests", :action => "deny" })
+
   # This is a blank app! Pick your first screen, build out the RCAV, and go from there. E.g.:
   # get("/your_first_screen", { :controller => "pages", :action => "first" })
 end
