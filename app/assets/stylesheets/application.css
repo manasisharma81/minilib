@@ -232,6 +232,13 @@
   margin-bottom: 0;
 }
 
+.borrow-request-submit {
+  --pico-form-element-spacing-vertical: 0.45rem;
+  --pico-form-element-spacing-horizontal: 0.9rem;
+  width: auto;
+  margin-bottom: 0;
+}
+
 .borrow-conversation-grid {
   display: grid;
   gap: 1rem;

@@ -91,9 +91,8 @@
 
                 <label for="message_box_<%= owner.id %>">Message</label>
                 <textarea id="message_box_<%= owner.id %>" name="query_message" placeholder="Example: Hi! Would you be open to lending this for a week?"></textarea>
-                <small class="helper-text">Example: Hi! Would you be open to lending this for a week?</small>
 
-                <button type="submit">Request to borrow from <%= owner.username %></button>
+                <button type="submit" class="borrow-request-submit">Request to borrow from <%= owner.username %></button>
               </form>
             <% end %>
           <% end %>
