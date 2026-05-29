@@ -27,7 +27,9 @@
     <h2>My books</h2>
     <p class="table-note">
       <a href="/search_books" role="button">Search books</a>
-      <span class="muted-text">Your shelf is empty until you add your first book.</span>
+      <% if @user.user_books.empty? %>
+        <span class="muted-text">Your shelf is empty until you add your first book.</span>
+      <% end %>
     </p>
   </header>
 
